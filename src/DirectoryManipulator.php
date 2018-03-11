@@ -3,7 +3,7 @@
 namespace Grinderspro\DirectoryManipulator;
 
 /**
- * Class DirManipulator
+ * Class DirectoryManipulator
  *
  * @author Grigorij Miroshnichenko <grinderspro@gmail.com>
  * @package Grinderspro\DirManipulator
@@ -148,8 +148,3 @@ class DirectoryManipulator
         return rmdir($path);
     }
 }
-
-//var_dump((new DirectoryManipulator())->create()->path());
-//(new DirectoryManipulator())->location('tmp/grinderspro')->delete();
-//var_dump((new DirectoryManipulator())->location('/tmp/')->name('grinderspro')->delete()->path());
-//var_dump($dir);die;
