@@ -30,13 +30,10 @@ class DirectoryManipulator
         if (empty($this->location))
             $this->location = $this->getSystemTmpDir();
 
-        if (empty($this->name))
-            $this->name = $this->getUniqueDirName();
-
         if (!file_exists($this->getFullPath()))
             mkdir($this->getFullPath(), 0777, true);
 
-            return $this;
+        return $this;
     }
 
     /**
@@ -50,16 +47,18 @@ class DirectoryManipulator
     }
 
     /**
+     * @param string $dirName
      * @return $this
      */
-    public function name($dirName)
+    public function name($dirName = '')
     {
-        $this->name = $dirName;
+        $this->name = $dirName ? $dirName : $this->getUniqueDirName();
 
         return $this;
     }
 
     /**
+     * @param string $location
      * @return $this
      */
     public function location($location)
@@ -92,7 +91,7 @@ class DirectoryManipulator
     public function path($path = '')
     {
         // TODO: Заглушка на случай, если передан $path. Дописать, если понадобится
-        if(!empty($path))
+        if (!empty($path))
             return true;
 
         return $this->getFullPath();

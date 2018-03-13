@@ -20,22 +20,22 @@ use Grinderspro\DirectoryManipulator\DirectoryManipulator;
 (new DirectoryManipulator())->create()
 ```
 
-Create a directory - "/var/www/{time()}"
+Create directory - "/var/tmp/{time()}"
 
 ```php
-(new DirectoryManipulator())->location('/var/tmp/')->create()
+(new DirectoryManipulator())->location('/var/tmp')->name()->create()
 ```
 
-Create a directory - "/var/www/grinderspro"
+Create directory - "/var/tmp/grinderspro"
 
 ```php
-(new DirectoryManipulator())->location('/var/tmp/')->name('grinderspro')->create()
+(new DirectoryManipulator())->location('/var/tmp')->name('grinderspro')->create()
 ```
 
 To get the full path of the newly created directory, use the ```path()``` method without parameters.
 
 ```php
-$dirName = (new DirectoryManipulator())->create()->path()
+$dirName = (new DirectoryManipulator())->create('/var/tmp')->name()->path()
 ```
 
 ### Delete directories
