@@ -52,7 +52,7 @@ class DirectoryManipulator
      */
     public function name($dirName = '')
     {
-        $this->name = $dirName ? $dirName : $this->getUniqueDirName();
+        $this->name = $dirName ? $this->sterilizationName($dirName) : $this->getUniqueDirName();
 
         return $this;
     }
@@ -114,6 +114,11 @@ class DirectoryManipulator
         return trim(rtrim($path, DIRECTORY_SEPARATOR));
     }
 
+    private function sterilizationName($name = '')
+    {
+        return trim($name, DIRECTORY_SEPARATOR);
+    }
+
     /**
      * @return string
      */
@@ -140,8 +145,12 @@ class DirectoryManipulator
             return true;
         }
 
-        foreach (glob($path . '/*') as $file) {
-            unlink($file);
+        $it = new \RecursiveDirectoryIterator($path, \FilesystemIterator::SKIP_DOTS);
+        $it = new \RecursiveIteratorIterator($it, \RecursiveIteratorIterator::CHILD_FIRST);
+
+        foreach($it as $file) {
+            if ($file->isDir()) rmdir($file->getPathname());
+            else unlink($file->getPathname());
         }
 
         return rmdir($path);
