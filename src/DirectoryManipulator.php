@@ -6,58 +6,77 @@ namespace Grinderspro\DirectoryManipulator;
  * Class DirectoryManipulator
  *
  * @author Grigoriy Miroschnichenko <grinderspro@gmail.com>
- * @package Grinderspro\DirManipulator
+ * @package Grinderspro\DirectoryManipulator
  */
+
+use Grinderspro\DirectoryManipulator\Helpers\DirectoryHelper;
 
 class DirectoryManipulator
 {
+    /** @var Manipulator */
+    private $manipulator;
+
     /** @var string */
     private $location;
 
     /** @var string */
     private $name;
 
+    /**
+     * DirectoryManipulator constructor.
+     *
+     * @param string $location
+     */
     public function __construct($location = '')
     {
-        $this->location = $this->sterilizationPath($location);
+        $this->manipulator = new Manipulator();
+
+        $this->location = empty($this->location) ? DirectoryHelper::getSystemTmp() : DirectoryHelper::sterilizationPath($location);
     }
 
     /**
-     * Creates a directory
+     * @param string $location
+     * @return $this
+     */
+    public function location($location)
+    {
+        $this->location = DirectoryHelper::sterilizationPath($location);
+
+        return $this;
+    }
+
+    /**
+     * Create directory
      *
      * @return $this
      */
     public function create()
     {
-        if (empty($this->location))
-            $this->location = $this->getSystemTmpDir();
-
-        if (!file_exists($this->getFullPath()))
-            mkdir($this->getFullPath(), 0777, true);
+        $this->manipulator->create($this->getFullPath());
 
         return $this;
     }
 
     /**
-     * Deletes the directory
+     * Delete directory
      *
      * @return $this
      */
     public function delete()
     {
-        $this->deleteDirectory($this->getFullPath());
+        $this->manipulator->delete($this->getFullPath());
 
         return $this;
     }
 
     /**
-     * Clears the directory
+     * Clear directory
      *
      * @return $this
      */
     public function clear()
     {
-        $this->clearDirectory($this->getFullPath());
+        $this->manipulator->clear($this->getFullPath());
 
         return $this;
     }
@@ -69,31 +88,13 @@ class DirectoryManipulator
      */
     public function name($dirName = '')
     {
-        $this->name = $dirName ? $this->sterilizationName($dirName) : $this->getUniqueDirName();
-
-        return $this;
-    }
-
-    public function rename()
-    {
-        // TODO: implementation rename() method;
-    }
-
-    /**
-     * @param string $location
-     * @return $this
-     */
-    public function location($location)
-    {
-        $this->location = $this->sterilizationPath($location);
+        $this->name = $dirName ?  DirectoryHelper::sterilizationName($dirName) : DirectoryHelper::getUniqueName();
 
         return $this;
     }
 
     /**
-     * Path
-     *
-     * Вернет полный путь до директории.
+     * Return the full path to the directory
      *
      * @example $dirName = (new DirManipulator())->create()->path();
      * @return bool|string
@@ -101,6 +102,11 @@ class DirectoryManipulator
     public function path()
     {
         return $this->getFullPath();
+    }
+
+    public function rename()
+    {
+        // TODO: implementation rename() method;
     }
 
     /**
@@ -113,72 +119,5 @@ class DirectoryManipulator
     private function getFullPath()
     {
         return $this->location . ($this->name ? DIRECTORY_SEPARATOR . $this->name : '');
-    }
-
-    /**
-     * Returns the full path of the system tmp folder
-     *
-     * @return string
-     */
-    private function getSystemTmpDir()
-    {
-        return $this->sterilizationPath(sys_get_temp_dir());
-    }
-
-    /**
-     * Clearing the path to the directory
-     *
-     * @param $path
-     * @return string
-     */
-    private function sterilizationPath($path)
-    {
-        return trim(rtrim($path, DIRECTORY_SEPARATOR));
-    }
-
-    private function sterilizationName($name = '')
-    {
-        return trim($name, DIRECTORY_SEPARATOR);
-    }
-
-
-    /**
-     * @return int
-     */
-    private function getUniqueDirName()
-    {
-        return time();
-    }
-
-    /**
-     * @param $path
-     * @return bool
-     */
-    private function deleteDirectory($path)
-    {
-        if (!$this->clearDirectory($path))
-            return false;
-
-        return rmdir($path);
-    }
-
-    /**
-     * @param $path
-     * @return bool|void
-     */
-    private function clearDirectory($path)
-    {
-        if (!file_exists($path))
-            return;
-
-        $it = new \RecursiveDirectoryIterator($path, \FilesystemIterator::SKIP_DOTS);
-        $it = new \RecursiveIteratorIterator($it, \RecursiveIteratorIterator::CHILD_FIRST);
-
-        foreach ($it as $file) {
-            if ($file->isDir()) rmdir($file->getPathname());
-            else unlink($file->getPathname());
-        }
-
-        return !$it->valid() ? true : false;
     }
 }
