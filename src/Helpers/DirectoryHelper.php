@@ -22,7 +22,7 @@ class DirectoryHelper
      */
     public static function getSystemTmp()
     {
-        return DirectoryHelper::sterilizationPath(sys_get_temp_dir());
+        return self::sterilizationPath(sys_get_temp_dir());
     }
 
     /**

@@ -13,14 +13,14 @@ use Grinderspro\DirectoryManipulator\Helpers\DirectoryHelper;
 
 class DirectoryManipulator
 {
-    /** @var Manipulator */
-    private $manipulator;
+    /** @var string */
+    private $name;
 
     /** @var string */
     private $location;
 
-    /** @var string */
-    private $name;
+    /** @var Manipulator */
+    private $manipulator;
 
     /**
      * DirectoryManipulator constructor.
@@ -30,7 +30,6 @@ class DirectoryManipulator
     public function __construct($location = '')
     {
         $this->manipulator = new Manipulator();
-
         $this->location = empty($this->location) ? DirectoryHelper::getSystemTmp() : DirectoryHelper::sterilizationPath($location);
     }
 
@@ -41,6 +40,17 @@ class DirectoryManipulator
     public function location($location)
     {
         $this->location = DirectoryHelper::sterilizationPath($location);
+
+        return $this;
+    }
+
+    /**
+     * @param string $dirName
+     * @return $this
+     */
+    public function name($dirName = '')
+    {
+        $this->name = $dirName ?  DirectoryHelper::sterilizationName($dirName) : DirectoryHelper::getUniqueName();
 
         return $this;
     }
@@ -81,16 +91,9 @@ class DirectoryManipulator
         return $this;
     }
 
-
-    /**
-     * @param string $dirName
-     * @return $this
-     */
-    public function name($dirName = '')
+    public function rename($name)
     {
-        $this->name = $dirName ?  DirectoryHelper::sterilizationName($dirName) : DirectoryHelper::getUniqueName();
-
-        return $this;
+        return rename($this->getFullPath(), $name);
     }
 
     /**
@@ -104,15 +107,8 @@ class DirectoryManipulator
         return $this->getFullPath();
     }
 
-    public function rename()
-    {
-        // TODO: implementation rename() method;
-    }
-
     /**
      * Returns the full path to our directory
-     *
-     * Implementation
      *
      * @return string
      */
