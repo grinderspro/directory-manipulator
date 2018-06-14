@@ -17,35 +17,48 @@ require __DIR__ . '/vendor/autoload.php';
 
 use Grinderspro\DirectoryManipulator\DirectoryManipulator;
 
-(new DirectoryManipulator())->create()
+(new DirectoryManipulator())->create();
+```
+
+Create many directories
+
+```php
+$dm = (new DirectoryManipulator())->location('/var/tmp/')->clear();
+
+for ($i=1; $i<=10; ++$i) {
+    $dm->name('gm'.$i)->create();
+}
 ```
 
 Create directory - "/var/tmp/{time()}"
 
 ```php
-(new DirectoryManipulator())->location('/var/tmp')->name()->create()
+(new DirectoryManipulator())->location('/var/tmp/')->name()->create();
 ```
 
 Create directory - "/var/tmp/grinderspro"
 
 ```php
-(new DirectoryManipulator())->location('/var/tmp')->name('grinderspro')->create()
+(new DirectoryManipulator())->location('/var/tmp/')->name('grinderspro')->create();
+```
+```php
+(new DirectoryManipulator())->location('/var/tmp/grinderspro')->create();
 ```
 
 To get the full path of the newly created directory, use the ```path()``` method without parameters.
 
 ```php
-$dirName = (new DirectoryManipulator())->create('/var/tmp')->name()->path()
+$dirName = (new DirectoryManipulator())->create('/var/tmp/')->name()->path();
 ```
 
 ### Delete directories
 
 ```php
-(new DirectoryManipulator())->location('/var/tmp')->name('grinderspro')->delete()
+(new DirectoryManipulator())->location('/var/tmp/')->name('grinderspro')->delete();
 ```
 
 or
 
 ```php
-(new DirectoryManipulator())->location('/var/tmp/grinderspro')->delete()
+(new DirectoryManipulator())->location('/var/tmp/grinderspro')->delete();
 ```
