@@ -50,6 +50,10 @@ To get the full path of the newly created directory, use the ```path()``` method
 ```php
 $dirName = (new DirectoryManipulator())->create('/var/tmp/')->name()->path();
 ```
+```php
+if(file_exists(new DirectoryManipulator())->location('/var/tmp/grinderspro')->create()->path())
+    return true;
+```
 
 ### Delete directories
 
@@ -57,8 +61,12 @@ $dirName = (new DirectoryManipulator())->create('/var/tmp/')->name()->path();
 (new DirectoryManipulator())->location('/var/tmp/')->name('grinderspro')->delete();
 ```
 
-or
-
 ```php
 (new DirectoryManipulator())->location('/var/tmp/grinderspro')->delete();
+```
+
+### Clear directory
+
+```php
+(new DirectoryManipulator())->location('/var/tmp/grinderspro')->clear();
 ```
