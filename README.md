@@ -45,14 +45,15 @@ Create directory - "/var/tmp/grinderspro"
 (new DirectoryManipulator())->location('/var/tmp/grinderspro')->create();
 ```
 
+```php
+if((new DirectoryManipulator())->location('/var/tmp/grinderspro')->create())
+    return true;
+```
+
 To get the full path of the newly created directory, use the ```path()``` method without parameters.
 
 ```php
 $dirName = (new DirectoryManipulator())->create('/var/tmp/')->name()->path();
-```
-```php
-if(file_exists(new DirectoryManipulator())->location('/var/tmp/grinderspro')->create()->path())
-    return true;
 ```
 
 ### Delete directories

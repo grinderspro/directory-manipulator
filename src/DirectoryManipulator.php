@@ -58,13 +58,11 @@ class DirectoryManipulator
     /**
      * Create directory
      *
-     * @return $this
+     * @return bool
      */
     public function create()
     {
-        $this->manipulator->create($this->getFullPath());
-
-        return $this;
+        return $this->manipulator->create($this->getFullPath());
     }
 
     /**
@@ -74,9 +72,7 @@ class DirectoryManipulator
      */
     public function delete()
     {
-        $this->manipulator->delete($this->getFullPath());
-
-        return $this;
+        return $this->manipulator->delete($this->getFullPath());
     }
 
     /**
